@@ -11,6 +11,7 @@ import Leaderboards from './pages/Leaderboards';
 import Analytics from './pages/Analytics';
 import ModelsPage from './pages/ModelsPage';
 import About from './pages/About';
+import SkaterProfile from './pages/SkaterProfile';
 
 export default function App() {
   const data = useData();
@@ -109,6 +110,15 @@ export default function App() {
             <Route
               path="/models"
               element={<ModelsPage models={data.models} />}
+            />
+            <Route
+              path="/skater"
+              element={
+                <SkaterProfile
+                  skaters={data.skaters}
+                  profiles={data.profiles}
+                />
+              }
             />
             <Route path="/about" element={<About />} />
           </Routes>
