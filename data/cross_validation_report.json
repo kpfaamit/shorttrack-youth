@@ -1,0 +1,25 @@
+{
+  "validation_date": "2026-01-28",
+  "competition": "2024 US Short Track Championship",
+  "competition_date": "2024-09-20",
+  "uss_pdf": "2025_US_ST_Championships.pdf",
+  "stl_source": "shorttracklive.info",
+  "results": {
+    "total_athletes": 10,
+    "total_validated": 10,
+    "match_rate": "100%",
+    "athletes": [
+      {"name": "Sean Shuai", "500m": "match", "1000m": "match", "1500m": "match"},
+      {"name": "Isabella Chen", "500m": "match", "1000m": "match", "1500m": "match"},
+      {"name": "Julius Kazanecki", "500m": "match", "1000m": "match", "1500m": "match"},
+      {"name": "Olimpia Kazanecka", "500m": "match", "1000m": "match", "1500m": "match"},
+      {"name": "Caleb Park", "500m": "match", "1000m": "match", "1500m": "match"},
+      {"name": "Justin Liu", "500m": "match", "1000m": "match", "1500m": "match"},
+      {"name": "Sofia Koons", "500m": "match", "1000m": "match", "1500m": "match"},
+      {"name": "Elizabeth Rhodehamel", "500m": "match", "1000m": "match", "1500m": "match"},
+      {"name": "Noah Troppe", "500m": "match", "1000m": "match", "1500m": "match"},
+      {"name": "Brandon Liao", "500m": "match", "1000m": "match", "1500m": "match"}
+    ]
+  },
+  "conclusion": "STL data matches USS official PDF 100%. STL reliable for ranks, USS PDF as primary source for times."
+}

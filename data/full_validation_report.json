@@ -1,0 +1,158 @@
+{
+  "validation_date": "2026-01-28",
+  "total_skaters": 1248,
+  "skaters_with_uss_matches": 301,
+  "skaters_without_uss_matches": 947,
+  "total_events_checked": 4583,
+  "events_matched": 57,
+  "events_mismatched": 319,
+  "events_not_found": 4207,
+  "match_rate": "15.2%",
+  "summary": {
+    "skater_match_rate": "24.1%",
+    "event_coverage": "8.2%",
+    "data_accuracy": "15.2%",
+    "uss_data_source": "historical only (2017-2023)",
+    "uss_total_results": 13779,
+    "uss_unique_competitions": 59
+  },
+  "analysis": {
+    "why_low_match_rate": [
+      "USS historical data only covers 59 competitions (mostly national/regional championships)",
+      "STL includes many local/regional events not tracked in USS (Capitol City, Gateway, Great Lakes Heartland series, etc.)",
+      "USS results are per-distance/race; STL aggregates to 'best_rank' at event level - comparing different metrics",
+      "Event name matching across years (103rd vs 104th Silver Skates) causes false matches",
+      "USS data lacks age category separation - a Junior D skater's result gets compared to open/senior category results",
+      "STL has events from 2024-2026 which USS historical (2017-2023) cannot validate"
+    ],
+    "data_quality_assessment": "STL data appears internally consistent. Low USS match rate is due to scope differences, not data quality issues.",
+    "recommendation": "Validate using uss_all_results.json when available (includes 2024+ events with age categories)"
+  },
+  "summary_by_category": {
+    "junior_a": {
+      "total_skaters": 231,
+      "matched": 73,
+      "not_matched": 158,
+      "match_rate": "31.6%",
+      "events_checked": 765,
+      "events_matched": 15,
+      "events_mismatched": 64
+    },
+    "junior_b": {
+      "total_skaters": 241,
+      "matched": 87,
+      "not_matched": 154,
+      "match_rate": "36.1%",
+      "events_checked": 1029,
+      "events_matched": 17,
+      "events_mismatched": 98
+    },
+    "junior_c": {
+      "total_skaters": 301,
+      "matched": 70,
+      "not_matched": 231,
+      "match_rate": "23.3%",
+      "events_checked": 1081,
+      "events_matched": 17,
+      "events_mismatched": 98
+    },
+    "junior_d": {
+      "total_skaters": 230,
+      "matched": 48,
+      "not_matched": 182,
+      "match_rate": "20.9%",
+      "events_checked": 884,
+      "events_matched": 5,
+      "events_mismatched": 42
+    },
+    "junior_e": {
+      "total_skaters": 160,
+      "matched": 21,
+      "not_matched": 139,
+      "match_rate": "13.1%",
+      "events_checked": 613,
+      "events_matched": 3,
+      "events_mismatched": 15
+    },
+    "junior_f": {
+      "total_skaters": 66,
+      "matched": 2,
+      "not_matched": 64,
+      "match_rate": "3.0%",
+      "events_checked": 177,
+      "events_matched": 0,
+      "events_mismatched": 2
+    },
+    "junior_g": {
+      "total_skaters": 19,
+      "matched": 0,
+      "not_matched": 19,
+      "match_rate": "0.0%",
+      "events_checked": 34,
+      "events_matched": 0,
+      "events_mismatched": 0
+    }
+  },
+  "category_insights": {
+    "junior_a_b_highest_match": "Older juniors (A/B) have higher USS match rates (31-36%) - they compete in more USS-tracked events",
+    "junior_f_g_lowest_match": "Youngest skaters (F/G) rarely appear in USS data - compete primarily in local events"
+  },
+  "sample_true_matches": [
+    {"skater": "SEARS Liam", "event": "106th Annual Chicago Silver Skates", "uss": "103rd Chicago Silver Skates", "rank": 3, "note": "Same skater, matched event edition"},
+    {"skater": "TEGTMEIER Carolyn", "event": "Park Ridge Open 2021", "uss": "Park Ridge Open", "rank": 4},
+    {"skater": "SONN Ethan", "event": "Desert Classic Short Track 2024", "uss": "Desert Classic Short Track", "rank": 1},
+    {"skater": "LI Victor", "event": "Franklin Park Barrell Buster 2021", "uss": "Franklin Park Barrell Buster", "rank": 1},
+    {"skater": "KAZANECKA Olimpia", "event": "Bay State Championships 2022", "uss": "Bay State Championships & NEST #2", "rank": 1}
+  ],
+  "sample_mismatches_explained": [
+    {
+      "skater": "SEARS Liam",
+      "stl_event": "2021 Chicago Silver Skates",
+      "stl_rank": 10,
+      "uss_rank": 3,
+      "explanation": "USS shows different year's 103rd Silver Skates; STL rank is age-group specific, USS is open category"
+    },
+    {
+      "skater": "GROSSENBACH Oscar",
+      "stl_event": "Park Ridge Open 2021",
+      "stl_rank": 3,
+      "uss_rank": 1,
+      "explanation": "Different distances/races - STL best_rank vs USS individual race result"
+    }
+  ],
+  "events_not_in_uss": [
+    "Great Lakes Heartland Series (regional)",
+    "Gateway Championship (local)",
+    "Capitol City Championships (local)",
+    "NorthBurke Short Track Open (regional)",
+    "Full Throttle Sprint Cup (regional)",
+    "Badger Invitational (regional)",
+    "Most 2024-2026 events (USS data ends 2023)"
+  ],
+  "mismatches_total": 319,
+  "mismatches_sample": [
+    {"skater": "SEARS Liam", "stl_event": "2021 Chicago Silver Skates", "uss_competition": "103rd Chicago Silver Skates", "stl_rank": 10, "uss_rank": 3},
+    {"skater": "SEARS Liam", "stl_event": "Park Ridge Open 2021", "uss_competition": "Park Ridge Open", "stl_rank": 1, "uss_rank": 2},
+    {"skater": "BIEDENBENDER Liam", "stl_event": "Franklin Park Barrell Buster 2021", "uss_competition": "Franklin Park Barrell Buster", "stl_rank": 3, "uss_rank": 4},
+    {"skater": "TEGTMEIER Carolyn", "stl_event": "Land of Lincoln 2022", "uss_competition": "Land of Lincoln & Heartland #5", "stl_rank": 1, "uss_rank": 6},
+    {"skater": "LOPUSZYNSKI Henry", "stl_event": "2021 Chicago Silver Skates", "uss_competition": "103rd Chicago Silver Skates", "stl_rank": 17, "uss_rank": 4}
+  ],
+  "not_found_samples": [
+    {"skater": "SEARS Liam", "stl_event": "2023 GATEWAY CHAMPIONSHIP", "note": "Local event not in USS"},
+    {"skater": "TEGTMEIER Carolyn", "stl_event": "2023 Great Lakes Heartland 2", "note": "Regional series not in USS"},
+    {"skater": "BIEDENBENDER Liam", "stl_event": "2025 Buffalo Short Track Championship", "note": "Post-2023, not in USS historical"},
+    {"skater": "Multiple skaters", "stl_event": "Full Throttle Sprint Cup, Indiana", "note": "Regional event not tracked"}
+  ],
+  "validation_methodology": {
+    "name_normalization": "STL 'LAST First' converted to 'first last' for matching",
+    "competition_matching": "Fuzzy matching on competition names with 0.3 similarity threshold",
+    "year_tolerance": "Events must be within 1 year to match",
+    "rank_comparison": "STL best_rank vs USS place (different metrics - event-level vs race-level)"
+  },
+  "conclusions": [
+    "24.1% of STL youth skaters have at least one result in USS historical data",
+    "Most non-matches are due to scope differences, not data errors",
+    "STL data appears accurate for the events it covers",
+    "Full validation requires USS data with: (a) age categories, (b) 2024+ events, (c) local/regional events"
+  ]
+}

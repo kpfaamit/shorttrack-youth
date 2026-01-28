@@ -1,0 +1,5 @@
+$(python3 -c "
+import json
+# The data from browser - I'll paste a summary
+data = $(cat)
+")
