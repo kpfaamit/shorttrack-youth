@@ -353,9 +353,8 @@ export default function ModelsPage({ models }: Props) {
   const medalByNationality = useMemo(() => {
     if (!models?.medal_model?.medal_by_nationality) return [];
     return Object.entries(models.medal_model.medal_by_nationality)
-      .sort((a, b) => b[1].medals - a[1].medals)
+      .sort((a, b) => b[1].medals - a[1].medals)  // Most medals first (top)
       .slice(0, 10)
-      .reverse()
       .map(([nation, data]) => ({
         nationality: nation,
         medals: data.medals,
