@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShortTrack Analytics - US Speed Skating Results</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⛸️</text></svg>">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>⛸️ ShortTrack Analytics</h1>
+            <p class="subtitle">US Speed Skating Short Track Results Database</p>
+        </div>
+        <nav>
+            <a href="#search" class="nav-link active" data-section="search">🔍 Search</a>
+            <a href="#compare" class="nav-link" data-section="compare">📊 Compare</a>
+            <a href="#stats" class="nav-link" data-section="stats">📈 Stats</a>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Search Section -->
+        <section id="search" class="section active">
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search skaters by name..." autocomplete="off">
+                <div id="searchResults" class="search-results"></div>
+            </div>
+            
+            <div id="skaterProfile" class="skater-profile hidden">
+                <div class="profile-header">
+                    <h2 id="skaterName"></h2>
+                    <button id="addToCompare" class="btn btn-secondary">+ Add to Compare</button>
+                </div>
+                <div class="profile-stats">
+                    <div class="stat-card">
+                        <span class="stat-label">Seasons Active</span>
+                        <span id="skaterSeasons" class="stat-value"></span>
+                    </div>
+                </div>
+                <div class="pb-section">
+                    <h3>Personal Bests</h3>
+                    <div id="personalBests" class="pb-grid"></div>
+                </div>
+                <div class="history-section">
+                    <h3>Race History</h3>
+                    <div id="raceHistory" class="race-history"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Compare Section -->
+        <section id="compare" class="section">
+            <div class="compare-header">
+                <h2>Compare Skaters</h2>
+                <p>Select up to 3 skaters to compare their performances</p>
+            </div>
+            
+            <div class="compare-selector">
+                <input type="text" id="compareSearchInput" placeholder="Search and add skaters..." autocomplete="off">
+                <div id="compareSearchResults" class="search-results"></div>
+            </div>
+            
+            <div id="selectedSkaters" class="selected-skaters"></div>
+            
+            <div id="comparisonChart" class="comparison-chart hidden">
+                <h3>Personal Best Comparison</h3>
+                <div class="chart-container">
+                    <canvas id="pbChart"></canvas>
+                </div>
+                <div id="comparisonTable" class="comparison-table"></div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section id="stats" class="section">
+            <h2>Database Statistics</h2>
+            <div class="stats-grid">
+                <div class="stat-card large">
+                    <span class="stat-value" id="totalSkaters">-</span>
+                    <span class="stat-label">Total Skaters</span>
+                </div>
+                <div class="stat-card large">
+                    <span class="stat-value" id="totalResults">-</span>
+                    <span class="stat-label">Race Results</span>
+                </div>
+                <div class="stat-card large">
+                    <span class="stat-value" id="totalSeasons">-</span>
+                    <span class="stat-label">Seasons</span>
+                </div>
+            </div>
+            
+            <div class="leaderboard-section">
+                <h3>🏆 Top Performers by Distance</h3>
+                <div class="distance-tabs">
+                    <button class="tab-btn active" data-distance="500m">500m</button>
+                    <button class="tab-btn" data-distance="1000m">1000m</button>
+                    <button class="tab-btn" data-distance="1500m">1500m</button>
+                    <button class="tab-btn" data-distance="3000m">3000m</button>
+                </div>
+                <div id="leaderboard" class="leaderboard"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Data sourced from <a href="https://www.usspeedskating.org/results" target="_blank">US Speed Skating</a> public archives (2017-2023)</p>
+        <p>13,779 race results • 1,639 skaters</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
