@@ -7,6 +7,7 @@ import {
   Tooltip,
   ResponsiveContainer,
   CartesianGrid,
+  Cell,
 } from 'recharts';
 import type { Models } from '../types/data';
 import MethodologyCard from '../components/cards/MethodologyCard';
@@ -49,6 +50,7 @@ function HorizontalBarSection({
   height,
   leftMargin,
   formatter,
+  showEffectColors,
 }: {
   title: string;
   data: Record<string, unknown>[];
@@ -58,10 +60,24 @@ function HorizontalBarSection({
   height?: number;
   leftMargin?: number;
   formatter?: (v: number) => string;
+  showEffectColors?: boolean;
 }) {
+  // For feature importance with effects, use signedImportance
+  const chartDataKey = showEffectColors ? 'signedImportance' : dataKey;
+  
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-6">
       <h3 className="text-lg font-bold text-gray-900 mb-4">{title}</h3>
+      {showEffectColors && (
+        <div className="flex gap-4 mb-3 text-xs">
+          <span className="flex items-center gap-1">
+            <span className="w-3 h-3 rounded bg-[#059669]"></span> Positive effect
+          </span>
+          <span className="flex items-center gap-1">
+            <span className="w-3 h-3 rounded bg-[#DC2626]"></span> Negative effect
+          </span>
+        </div>
+      )}
       <ResponsiveContainer
         width="100%"
         height={height ?? Math.max(300, data.length * 32)}
@@ -77,6 +93,7 @@ function HorizontalBarSection({
             type="number"
             tick={{ fontSize: 12 }}
             tickFormatter={formatter}
+            domain={showEffectColors ? ['dataMin', 'dataMax'] : undefined}
           />
           <YAxis
             type="category"
@@ -85,12 +102,24 @@ function HorizontalBarSection({
             width={(leftMargin ?? 120) - 10}
           />
           <Tooltip
-            formatter={(value: number | undefined) => [
-              value != null && formatter ? formatter(value) : (value ?? 0),
-              dataKey,
-            ]}
+            formatter={(value: number | undefined) => {
+              const absValue = value != null ? Math.abs(value) : 0;
+              const formatted = formatter ? formatter(absValue) : absValue.toFixed(4);
+              return [formatted, 'Importance'];
+            }}
           />
-          <Bar dataKey={dataKey} fill={fill} radius={[0, 4, 4, 0]} />
+          {showEffectColors ? (
+            <Bar dataKey={chartDataKey} radius={[0, 4, 4, 0]}>
+              {data.map((entry, index) => (
+                <Cell 
+                  key={`cell-${index}`}
+                  fill={entry.effect === 'negative' ? '#DC2626' : '#059669'}
+                />
+              ))}
+            </Bar>
+          ) : (
+            <Bar dataKey={dataKey} fill={fill} radius={[0, 4, 4, 0]} />
+          )}
         </BarChart>
       </ResponsiveContainer>
     </div>
@@ -141,11 +170,31 @@ function VerticalBarSection({
 
 export default function ModelsPage({ models }: Props) {
   // ── Overtake Model data ──
+  // Feature effect direction: positive = helps overtake, negative = hinders
+  const FEATURE_EFFECTS: Record<string, 'positive' | 'negative' | 'neutral'> = {
+    rank_before: 'positive',       // Starting behind = more room to overtake
+    height: 'positive',            // Taller = longer stride
+    lap_fraction: 'negative',      // Later in race = harder to overtake
+    age: 'negative',               // Older = slower reflexes
+    dist_1500: 'positive',         // Endurance helps
+    round_stage: 'negative',       // Later rounds = harder competition
+    dist_500: 'positive',          // Sprint speed helps
+    gender: 'neutral',             // No inherent direction
+    dist_1000: 'positive',         // Middle distance helps
+    is_last_lap: 'positive',       // Last lap = final push opportunity
+  };
+
   const overtakeFeatureData = useMemo(() => {
     if (!models) return [];
     return [...models.overtake_model.feature_importance_ranked]
-      .sort((a, b) => a.importance - b.importance)
-      .slice(-10);
+      .sort((a, b) => b.importance - a.importance)  // Descending: most important first (top)
+      .slice(0, 10)
+      .map(f => ({
+        ...f,
+        effect: FEATURE_EFFECTS[f.feature] ?? 'neutral',
+        // Make importance signed based on effect direction
+        signedImportance: FEATURE_EFFECTS[f.feature] === 'negative' ? -f.importance : f.importance,
+      }));
   }, [models]);
 
   const overtakeByPosition = useMemo(() => {
@@ -174,11 +223,28 @@ export default function ModelsPage({ models }: Props) {
   }, [models]);
 
   // ── Medal Model data ──
+  // Feature effect direction for medal model
+  const MEDAL_FEATURE_EFFECTS: Record<string, 'positive' | 'negative' | 'neutral'> = {
+    total_races: 'positive',       // More experience = better
+    avg_position: 'negative',      // Higher avg position = worse (lower is better)
+    finals_rate: 'positive',       // More finals = better
+    threat_score: 'positive',      // Higher threat = more likely to medal
+    clean_race_pct: 'positive',    // Cleaner races = better
+    passes_made: 'positive',       // More passes = aggressive/capable
+    penalty_rate: 'negative',      // More penalties = worse
+    net_passes: 'positive',        // Net positive passes = better
+  };
+
   const medalFeatureData = useMemo(() => {
     if (!models) return [];
     return [...models.medal_model.feature_importance]
-      .sort((a, b) => a.importance - b.importance)
-      .slice(-10);
+      .sort((a, b) => b.importance - a.importance)  // Descending: most important first (top)
+      .slice(0, 10)
+      .map(f => ({
+        ...f,
+        effect: MEDAL_FEATURE_EFFECTS[f.feature] ?? 'neutral',
+        signedImportance: MEDAL_FEATURE_EFFECTS[f.feature] === 'negative' ? -f.importance : f.importance,
+      }));
   }, [models]);
 
   const medalByPosition = useMemo(() => {
@@ -290,6 +356,7 @@ export default function ModelsPage({ models }: Props) {
           nameKey="feature"
           fill={CHART_COLORS.blue}
           leftMargin={160}
+          showEffectColors={true}
         />
 
         {/* Overtake by Position */}
@@ -343,6 +410,7 @@ export default function ModelsPage({ models }: Props) {
           nameKey="feature"
           fill={CHART_COLORS.gold}
           leftMargin={160}
+          showEffectColors={true}
         />
 
         {/* Medal by Position */}
