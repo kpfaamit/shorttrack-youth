@@ -47,6 +47,7 @@ export default function Navbar({ category, onCategoryChange }: NavbarProps) {
             {/* Analyze */}
             <div className="flex items-center gap-0.5">
               <span className="text-white/40 text-xs font-bold uppercase tracking-wider mr-2">Analyze</span>
+              <NavLink to="/leaderboards" className={navLink}>🏆 Leaders</NavLink>
               <NavLink to="/analytics" className={navLink}>📊 Analytics</NavLink>
               <NavLink to="/models" className={navLink}>🤖 Models</NavLink>
               <NavLink to="/about" className={navLink}>ℹ️ About</NavLink>
@@ -70,6 +71,7 @@ export default function Navbar({ category, onCategoryChange }: NavbarProps) {
           <NavLink to="/" end className={navLink}>🎯 Race Prep</NavLink>
           <NavLink to="/scouting" className={navLink}>🔍 Scouting</NavLink>
           <NavLink to="/progress" className={navLink}>📈 Progress</NavLink>
+          <NavLink to="/leaderboards" className={navLink}>🏆 Leaders</NavLink>
           <NavLink to="/analytics" className={navLink}>📊 Analytics</NavLink>
           <NavLink to="/models" className={navLink}>🤖 Models</NavLink>
           <NavLink to="/about" className={navLink}>ℹ️ About</NavLink>

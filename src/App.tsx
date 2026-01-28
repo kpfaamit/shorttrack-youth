@@ -6,6 +6,7 @@ import { useFilters } from './hooks/useFilters';
 import RacePrep from './pages/RacePrep';
 import Scouting from './pages/Scouting';
 import Progress from './pages/Progress';
+import Leaderboards from './pages/Leaderboards';
 import Analytics from './pages/Analytics';
 import ModelsPage from './pages/ModelsPage';
 import About from './pages/About';
@@ -68,6 +69,15 @@ export default function App() {
               path="/progress"
               element={
                 <Progress
+                  skaters={data.skaters}
+                  category={filters.category}
+                />
+              }
+            />
+            <Route
+              path="/leaderboards"
+              element={
+                <Leaderboards
                   skaters={data.skaters}
                   category={filters.category}
                 />
