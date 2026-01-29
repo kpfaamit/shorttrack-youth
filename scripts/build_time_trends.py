@@ -67,10 +67,56 @@ def parse_time(time_str: str) -> Optional[float]:
     except:
         return None
 
+def is_valid_time_for_distance(time_secs: float, distance: int) -> bool:
+    """Check if time is plausible for the given distance.
+    
+    Filters out obvious data errors like 47s for 1000m.
+    Uses conservative bounds for youth skating (most skaters aren't elite).
+    """
+    if not time_secs or not distance:
+        return False
+    
+    # Minimum times set conservatively for youth skating
+    # (elite times are rare and often data errors at local meets)
+    # Maximum times for slow recreational skaters
+    bounds = {
+        222: (18, 90),      # 222m: 18s - 1.5min
+        333: (25, 120),     # 333m: 25s - 2min  
+        500: (38, 150),     # 500m: 38s - 2.5min
+        777: (60, 210),     # 777m: 60s - 3.5min
+        1000: (80, 300),    # 1000m: 1:20 - 5min (filter suspicious <1:20 times)
+        1500: (130, 420),   # 1500m: 2:10 - 7min
+        3000: (280, 720),   # 3000m: 4:40 - 12min
+    }
+    
+    if distance in bounds:
+        min_time, max_time = bounds[distance]
+        return min_time <= time_secs <= max_time
+    
+    # Unknown distance - accept if reasonable overall
+    return 25 <= time_secs <= 600
+
 def normalize_name(name: str) -> str:
-    """Normalize skater name for matching: 'CHEN\xa0Daniel' -> 'chen daniel'"""
+    """Normalize skater name for matching: 'CHEN Daniel USA-PSSP' -> 'chen daniel'"""
     # Replace non-breaking spaces and normalize
     name = name.replace('\xa0', ' ').replace('  ', ' ').strip().lower()
+    
+    # Remove club/country suffixes like "USA-PSSP", "USA-SCSC", "CAN-XXXXXX"
+    # Pattern: 3-letter country code followed by dash and club code
+    name = re.sub(r'\s+[a-z]{2,3}-[a-z0-9]+$', '', name, flags=re.IGNORECASE)
+    
+    # Remove standalone country codes at end
+    name = re.sub(r'\s+(usa|can|chn|kor|jpn|ned|ita|rus|gbr|ger|fra|aus)$', '', name, flags=re.IGNORECASE)
+    
+    # Remove leading numbers (e.g., "44CHEN Daniel" -> "chen daniel")  
+    name = re.sub(r'^\d+', '', name)
+    
+    # Remove trailing asterisks
+    name = re.sub(r'\*+$', '', name)
+    
+    # Clean up extra spaces
+    name = ' '.join(name.split())
+    
     return name
 
 def load_uss_results() -> dict:
@@ -102,6 +148,10 @@ def load_uss_results() -> dict:
             distance = int(dist_match.group(1)) if dist_match else None
             
             if not name or not time_secs or not distance:
+                continue
+            
+            # Validate time is plausible for the distance (filter parsing errors)
+            if not is_valid_time_for_distance(time_secs, distance):
                 continue
             
             norm_name = normalize_name(name)
@@ -138,6 +188,10 @@ def load_uss_results() -> dict:
             distance = int(dist_match.group(1)) if dist_match else None
             
             if not name or not time_secs or not distance:
+                continue
+            
+            # Validate time is plausible for the distance
+            if not is_valid_time_for_distance(time_secs, distance):
                 continue
             
             norm_name = normalize_name(name)
@@ -188,6 +242,10 @@ def load_uss_results() -> dict:
                     time_secs = parse_time(time_str)
                     
                     if not name or not time_secs:
+                        continue
+                    
+                    # Validate time is plausible for the distance
+                    if not is_valid_time_for_distance(time_secs, distance):
                         continue
                     
                     norm_name = normalize_name(name)
@@ -256,17 +314,24 @@ def build_time_trends():
                 continue  # Skip, we have USS data
             
             time_secs = parse_time(pb.get('time'))
-            if time_secs:
-                pb_date = parse_date(pb.get('date'))
-                all_results.append({
-                    'distance': pb.get('distance'),
-                    'time': time_secs,
-                    'time_str': pb.get('time'),
-                    'competition': pb_comp,
-                    'date': pb_date.isoformat() if pb_date else None,
-                    'place': None,
-                    'source': 'stl',
-                })
+            distance = pb.get('distance')
+            
+            # Validate time is plausible for the distance
+            if not time_secs or not distance:
+                continue
+            if not is_valid_time_for_distance(time_secs, distance):
+                continue
+                
+            pb_date = parse_date(pb.get('date'))
+            all_results.append({
+                'distance': distance,
+                'time': time_secs,
+                'time_str': pb.get('time'),
+                'competition': pb_comp,
+                'date': pb_date.isoformat() if pb_date else None,
+                'place': None,
+                'source': 'stl',
+            })
         
         if all_results:
             # Organize by distance and sort by date
@@ -276,31 +341,46 @@ def build_time_trends():
                 by_distance[dist].append(r)
             
             # Sort and deduplicate each distance
-            # Priority: uss_pdf > uss_hist > stl
+            # Keep only the BEST time per competition (per date within 2 days)
             source_priority = {'uss_pdf': 0, 'uss_hist': 1, 'stl': 2}
             
             for dist in by_distance:
-                # Sort by date first, then by source priority
-                by_distance[dist].sort(key=lambda x: (x['date'] or '9999', source_priority.get(x['source'], 9)))
+                # Sort by date, then by time (fastest first)
+                by_distance[dist].sort(key=lambda x: (x['date'] or '9999', x['time']))
                 
-                # Deduplicate: keep only one result per date (within 2 days tolerance)
+                # Keep only best time per competition (group by date within 2 days)
                 deduped = []
+                
                 for r in by_distance[dist]:
                     if not r['date']:
-                        deduped.append(r)
+                        # No date - check if same competition name exists
+                        dominated = False
+                        for existing in deduped:
+                            if existing.get('competition', '')[:30] == r.get('competition', '')[:30]:
+                                # Same competition, keep faster time
+                                if r['time'] < existing['time']:
+                                    deduped.remove(existing)
+                                    deduped.append(r)
+                                dominated = True
+                                break
+                        if not dominated:
+                            deduped.append(r)
                         continue
                     
-                    # Check if we already have a result within 2 days
+                    # Check if we already have a result for this competition (within 2 days)
                     dominated = False
-                    for existing in deduped:
+                    for i, existing in enumerate(deduped):
                         if not existing['date']:
                             continue
                         try:
                             r_date = datetime.fromisoformat(r['date'])
                             e_date = datetime.fromisoformat(existing['date'])
                             diff = abs((r_date - e_date).days)
-                            # Same race if within 2 days and same time (within 0.5s)
-                            if diff <= 2 and abs(r['time'] - existing['time']) < 0.5:
+                            # Same competition if within 2 days
+                            if diff <= 2:
+                                # Keep the faster time
+                                if r['time'] < existing['time']:
+                                    deduped[i] = r
                                 dominated = True
                                 break
                         except:

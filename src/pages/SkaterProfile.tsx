@@ -362,8 +362,22 @@ export default function SkaterProfile({ skaters, timeTrends }: Props) {
                   const data = timeTrendData[distance];
                   if (!data || data.length < 2) return null;
                   
-                  const minTime = Math.min(...data.map(d => d.time));
+                  const minTimeFromTrends = Math.min(...data.map(d => d.time));
                   const maxTime = Math.max(...data.map(d => d.time));
+                  
+                  // Use actual PB from skater profile if available and better
+                  const pbFromProfile = selectedSkater?.personal_bests?.[String(distance)];
+                  let actualPB = minTimeFromTrends;
+                  if (pbFromProfile) {
+                    const pbSeconds = pbFromProfile.includes(':') 
+                      ? parseInt(pbFromProfile.split(':')[0]) * 60 + parseFloat(pbFromProfile.split(':')[1])
+                      : parseFloat(pbFromProfile);
+                    if (!isNaN(pbSeconds) && pbSeconds < minTimeFromTrends) {
+                      actualPB = pbSeconds;
+                    }
+                  }
+                  
+                  const minTime = Math.min(actualPB, minTimeFromTrends);
                   const padding = (maxTime - minTime) * 0.1;
                   
                   const chartData = data.map(d => ({
@@ -381,7 +395,7 @@ export default function SkaterProfile({ skaters, timeTrends }: Props) {
                           {distance}m Time Trend
                         </h4>
                         <span className="text-sm font-semibold text-blue-600 bg-blue-50 px-2 py-1 rounded">
-                          PB: {formatTime(minTime)}
+                          PB: {formatTime(actualPB)}
                         </span>
                       </div>
                       <ResponsiveContainer width="100%" height={250}>
@@ -418,7 +432,7 @@ export default function SkaterProfile({ skaters, timeTrends }: Props) {
                             }}
                           />
                           <ReferenceLine 
-                            y={minTime} 
+                            y={actualPB} 
                             stroke="#D97706" 
                             strokeWidth={2}
                             strokeDasharray="5 5"
