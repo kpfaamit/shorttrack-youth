@@ -67,6 +67,57 @@ def parse_time(time_str: str) -> Optional[float]:
     except:
         return None
 
+def normalize_distance(distance: int) -> int:
+    """Map non-standard distances to standard event distances.
+    
+    Different rinks have different track lengths (107m, 111m, 100m).
+    STL stores actual distance skated, need to map to standard events.
+    Standard short track is 111.12m per lap.
+    """
+    if not distance:
+        return None
+    
+    # Standard distances and their common variations
+    # Being generous with ranges to catch different track sizes
+    mappings = {
+        # 222m (2 laps) - tracks from 100m to 115m
+        (200, 240): 222,
+        # 333m (3 laps)  
+        (300, 360): 333,
+        # 400m (special event, rare)
+        (390, 430): 500,  # Map 400m variants to 500m
+        # 500m (4.5 laps)
+        (450, 550): 500,
+        # 600m (special, rare) - map to 500m or 777m based on time validation later
+        (580, 620): 500,
+        # 666m (6 laps on 111m track) - map to 777m
+        (640, 700): 777,
+        # 777m (7 laps)
+        (740, 820): 777,
+        # 1000m (9 laps)
+        (900, 1100): 1000,
+        # 1500m (13.5 laps)
+        (1400, 1600): 1500,
+        # 2000m (rare) - could be misclassified 1500m
+        (1900, 2100): 1500,
+        # 3000m (27 laps)
+        (2800, 3200): 3000,
+    }
+    
+    for (low, high), standard in mappings.items():
+        if low <= distance <= high:
+            return standard
+    
+    # Return as-is if it's already a standard distance
+    if distance in [222, 333, 500, 777, 1000, 1500, 3000]:
+        return distance
+    
+    # Filter out clearly wrong distances (under 200m or over 4000m)
+    if distance < 200 or distance > 4000:
+        return None
+    
+    return None  # Don't keep unusual distances that don't map
+
 def is_valid_time_for_distance(time_secs: float, distance: int) -> bool:
     """Check if time is plausible for the given distance.
     
@@ -185,7 +236,8 @@ def load_uss_results() -> dict:
             distance_str = result.get('distance', '')
             
             dist_match = re.search(r'(\d+)', distance_str)
-            distance = int(dist_match.group(1)) if dist_match else None
+            raw_distance = int(dist_match.group(1)) if dist_match else None
+            distance = normalize_distance(raw_distance)
             
             if not name or not time_secs or not distance:
                 continue
@@ -232,7 +284,8 @@ def load_uss_results() -> dict:
             comp_date = parse_date(comp_name)
             
             for event in comp.get('events', []):
-                distance = event.get('distance')
+                raw_distance = event.get('distance')
+                distance = normalize_distance(raw_distance)
                 if not distance:
                     continue
                 
@@ -314,7 +367,8 @@ def build_time_trends():
                 continue  # Skip, we have USS data
             
             time_secs = parse_time(pb.get('time'))
-            distance = pb.get('distance')
+            raw_distance = pb.get('distance')
+            distance = normalize_distance(raw_distance)
             
             # Validate time is plausible for the distance
             if not time_secs or not distance:
