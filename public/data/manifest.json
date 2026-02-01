@@ -1,1 +1,41 @@
-{"version":"3.0","last_updated":"2026-01-28T15:29:53.955747Z","season":"2025-2026","sources":{"isu-api":{"provider":"ISU","categories":["senior","junior"],"events":29,"skaters":666,"updated":"2026-01-28"},"shorttracklive.info":{"provider":"shorttracklive.info","categories":["youth_ja","youth_jb","youth_jc","youth_jd","youth_je","youth_jf","youth_jg"],"skaters":1248,"updated":"2026-01-28"},"shorttrackonline.info":{"provider":"shorttrackonline.info","categories":["youth_jc","youth_jd"],"skaters":642,"updated":"2026-01-28"}},"stats":{"total_skaters":2193,"total_heats":4609,"total_passes":5928,"total_events":29,"total_incidents":1222,"total_crashes":2276,"total_medals":1398,"total_races":4609,"total_overtakes":5928,"total_pass_events":12043,"events":["ISU Short Track World Tour #1 (Montreal)","ISU Short Track World Tour #3 (Seoul)","ISU Short Track World Tour #2 (Beijing)","ISU Short Track World Tour #4 (Tilburg)"]}}
+{
+  "version": "4.0",
+  "last_updated": "2026-02-01T23:24:33.057765Z",
+  "season": "2025-2026",
+  "sources": {
+    "isu-api": {
+      "provider": "ISU",
+      "categories": [
+        "senior",
+        "junior"
+      ],
+      "updated": "2026-02-01"
+    },
+    "shorttracklive.info": {
+      "provider": "shorttracklive.info",
+      "categories": [
+        "youth_ja",
+        "youth_jb",
+        "youth_jc",
+        "youth_jd",
+        "youth_je",
+        "youth_jf",
+        "youth_jg"
+      ],
+      "updated": "2026-02-01"
+    },
+    "us-historical": {
+      "provider": "US Speed Skating",
+      "updated": "2026-02-01"
+    }
+  },
+  "stats": {
+    "total_skaters": 5244,
+    "total_events": 190,
+    "total_races": 43488,
+    "total_medals": 1398,
+    "total_passes": 5928,
+    "total_crashes": 2276,
+    "total_incidents": 1222
+  }
+}
