@@ -1,6 +1,6 @@
 {
   "version": "4.0",
-  "last_updated": "2026-02-01T23:24:33.057765Z",
+  "last_updated": "2026-02-01T23:53:44.749046Z",
   "season": "2025-2026",
   "sources": {
     "isu-api": {
@@ -30,9 +30,9 @@
     }
   },
   "stats": {
-    "total_skaters": 5244,
+    "total_skaters": 5257,
     "total_events": 190,
-    "total_races": 43488,
+    "total_races": 43806,
     "total_medals": 1398,
     "total_passes": 5928,
     "total_crashes": 2276,
