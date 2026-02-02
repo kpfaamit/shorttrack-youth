@@ -26,7 +26,7 @@ export default function TopOvertakersChart({ skaters }: Props) {
   }, []);
 
   const sortedData = [...skaters]
-    .sort((a, b) => b.stats.total_passes_made - a.stats.total_passes_made)
+    .sort((a, b) => (b.stats?.total_passes_made || 0) - (a.stats?.total_passes_made || 0))
     .slice(0, isMobile ? 10 : 20);
 
   // Mobile: simple table view
@@ -45,8 +45,8 @@ export default function TopOvertakersChart({ skaters }: Props) {
                 <span className="text-sm font-medium truncate">{s.name}</span>
               </div>
               <div className="flex gap-3 text-xs flex-shrink-0">
-                <span className="text-[#2646A7] font-semibold">+{s.stats.total_passes_made}</span>
-                <span className="text-red-600 font-semibold">-{s.stats.total_times_passed}</span>
+                <span className="text-[#2646A7] font-semibold">+{(s.stats?.total_passes_made || 0)}</span>
+                <span className="text-red-600 font-semibold">-{(s.stats?.total_times_passed || 0)}</span>
               </div>
             </div>
           ))}
@@ -63,8 +63,8 @@ export default function TopOvertakersChart({ skaters }: Props) {
   const data = sortedData
     .map((s) => ({
       name: `${s.flag} ${s.name}`,
-      passesMade: s.stats.total_passes_made,
-      timesPassed: s.stats.total_times_passed,
+      passesMade: s.stats?.total_passes_made || 0,
+      timesPassed: s.stats?.total_times_passed || 0,
     }))
     .reverse();
 

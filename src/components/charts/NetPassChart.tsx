@@ -26,7 +26,7 @@ export default function NetPassChart({ skaters }: Props) {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  const sorted = [...skaters].sort((a, b) => b.stats.net_passes - a.stats.net_passes);
+  const sorted = [...skaters].sort((a, b) => (b.stats?.net_passes || 0) - (a.stats?.net_passes || 0));
   const topN = isMobile ? 5 : 10;
   const top = sorted.slice(0, topN);
   const bottom = sorted.slice(-topN).reverse();
@@ -57,8 +57,8 @@ export default function NetPassChart({ skaters }: Props) {
                 <span className="text-sm">{s.flag}</span>
                 <span className="text-sm truncate">{s.name}</span>
               </div>
-              <span className={`text-sm font-bold ${s.stats.net_passes >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                {s.stats.net_passes > 0 ? '+' : ''}{s.stats.net_passes}
+              <span className={`text-sm font-bold ${(s.stats?.net_passes || 0) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                {(s.stats?.net_passes || 0) > 0 ? '+' : ''}{s.stats?.net_passes || 0}
               </span>
             </div>
           ))}
@@ -70,7 +70,7 @@ export default function NetPassChart({ skaters }: Props) {
   // Desktop: chart view
   const data = uniqueData.map((s) => ({
     name: `${s.flag} ${s.name}`,
-    net: s.stats.net_passes,
+    net: s.stats?.net_passes || 0,
   }));
 
   return (

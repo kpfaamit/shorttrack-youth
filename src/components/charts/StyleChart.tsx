@@ -30,7 +30,8 @@ export default function StyleChart({ skaters }: Props) {
   };
 
   for (const s of skaters) {
-    counts[s.stats.style]++;
+    const style = s.stats?.style || 'unknown';
+    counts[style]++;
   }
 
   const data = (Object.entries(counts) as [Style, number][])

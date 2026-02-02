@@ -219,16 +219,16 @@ export default function SkaterTable({ skaters }: Props) {
                   {s.stats.net_passes}
                 </td>
                 <td className="px-2 py-2 text-gray-700">
-                  {s.stats.avg_passes_per_race.toFixed(1)}
+                  {s.stats?.avg_passes_per_race?.toFixed(1) ?? '0.0'}
                 </td>
-                <td className="px-2 py-2 text-gray-600">{s.stats.passes_early}</td>
-                <td className="px-2 py-2 text-gray-600">{s.stats.passes_middle}</td>
-                <td className="px-2 py-2 text-gray-600">{s.stats.passes_late}</td>
+                <td className="px-2 py-2 text-gray-600">{s.stats?.passes_early ?? 0}</td>
+                <td className="px-2 py-2 text-gray-600">{s.stats?.passes_middle ?? 0}</td>
+                <td className="px-2 py-2 text-gray-600">{s.stats?.passes_late ?? 0}</td>
                 <td className="px-2 py-2">
                   <span
-                    className={`text-xs font-semibold px-2 py-0.5 rounded-full border ${STYLE_COLORS[s.stats.style]}`}
+                    className={`text-xs font-semibold px-2 py-0.5 rounded-full border ${STYLE_COLORS[s.stats?.style || 'unknown']}`}
                   >
-                    {STYLE_LABELS[s.stats.style]}
+                    {STYLE_LABELS[s.stats?.style || 'unknown']}
                   </span>
                 </td>
                 <td className="px-2 py-2 text-gray-700 font-mono text-xs whitespace-nowrap">
