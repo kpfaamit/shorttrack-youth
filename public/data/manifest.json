@@ -1,9 +1,10 @@
 {
-  "version": "9.0",
-  "last_updated": "2026-02-02T05:13:49.808371Z",
+  "version": "10.0",
+  "last_updated": "2026-02-02T05:21:28.007652Z",
   "season": "2025-2026",
   "stats": {
-    "total_skaters": 3020,
-    "total_events": 122
+    "total_skaters": 3297,
+    "total_events": 160,
+    "total_races": 57860
   }
 }
