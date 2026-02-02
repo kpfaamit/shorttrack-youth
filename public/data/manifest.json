@@ -1,7 +1,8 @@
 {
-  "version": "5.0",
-  "last_updated": "2026-02-02T04:11:29.156201Z",
+  "version": "6.0",
+  "last_updated": "2026-02-02T04:43:03.055384Z",
   "season": "2025-2026",
+  "filter": ">= 2020-2021 season",
   "sources": {
     "isu-api": {
       "provider": "ISU",
@@ -30,12 +31,12 @@
     }
   },
   "stats": {
-    "total_skaters": 5257,
-    "total_events": 190,
-    "total_races": 43806,
-    "total_medals": 1398,
-    "total_passes": 5928,
-    "total_crashes": 2276,
-    "total_incidents": 1222
+    "total_skaters": 2562,
+    "total_events": 122,
+    "total_races": 29070,
+    "total_medals": 0,
+    "total_passes": 0,
+    "total_crashes": 0,
+    "total_incidents": 0
   }
 }
