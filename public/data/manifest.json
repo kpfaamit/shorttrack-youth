@@ -1,6 +1,6 @@
 {
   "version": "6.0",
-  "last_updated": "2026-02-02T04:43:03.055384Z",
+  "last_updated": "2026-02-02T04:44:33.575909Z",
   "season": "2025-2026",
   "filter": ">= 2020-2021 season",
   "sources": {
@@ -31,11 +31,11 @@
     }
   },
   "stats": {
-    "total_skaters": 2562,
+    "total_skaters": 2575,
     "total_events": 122,
-    "total_races": 29070,
+    "total_races": 29388,
     "total_medals": 0,
-    "total_passes": 0,
+    "total_passes": 5928,
     "total_crashes": 0,
     "total_incidents": 0
   }
