@@ -1,28 +1,15 @@
 {
-  "version": "6.0",
-  "last_updated": "2026-02-02T04:44:33.575909Z",
+  "version": "7.0",
+  "last_updated": "2026-02-02T04:45:24.864197Z",
   "season": "2025-2026",
-  "filter": ">= 2020-2021 season",
+  "filter": "Recent seasons only (>= 2020)",
   "sources": {
     "isu-api": {
       "provider": "ISU",
-      "categories": [
-        "senior",
-        "junior"
-      ],
       "updated": "2026-02-01"
     },
     "shorttracklive.info": {
       "provider": "shorttracklive.info",
-      "categories": [
-        "youth_ja",
-        "youth_jb",
-        "youth_jc",
-        "youth_jd",
-        "youth_je",
-        "youth_jf",
-        "youth_jg"
-      ],
       "updated": "2026-02-01"
     },
     "us-historical": {
@@ -31,12 +18,12 @@
     }
   },
   "stats": {
-    "total_skaters": 2575,
-    "total_events": 122,
-    "total_races": 29388,
-    "total_medals": 0,
+    "total_skaters": 2912,
+    "total_events": 160,
+    "total_races": 35145,
+    "total_medals": 1398,
     "total_passes": 5928,
-    "total_crashes": 0,
-    "total_incidents": 0
+    "total_crashes": 2276,
+    "total_incidents": 1222
   }
 }
