@@ -1,11 +1,9 @@
 {
-  "version": "13.0",
-  "last_updated": "2026-02-02T14:26:06.228167Z",
-  "season": "2025-2026",
-  "filter": "STRICT: shorttracklive.info events only",
+  "version": "14.0",
+  "last_updated": "2026-02-02T17:36:46.913487Z",
   "stats": {
-    "total_skaters": 2147,
+    "total_skaters": 2334,
     "total_events": 130,
-    "total_races": 29698
+    "total_races": 31246
   }
 }
